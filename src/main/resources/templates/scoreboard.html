@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scoreboard</title>
+</head>
+<body>
+
+<div id="scores" style="color: white"></div>
+
+<script>
+    const scores = document.getElementById('scores');
+
+    setInterval(() => {
+        fetch('/user/scores', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', "Authorization": localStorage.getItem('currentUser')},
+        }).then(r => r.json())
+            .then(data => {
+                scores.innerHTML = "";
+                scores.innerHTML += data.username + " - " + data.score + "<br>";
+                data.scores.forEach(scoreEntry => {
+                    scores.innerHTML += scoreEntry.username + " - " + scoreEntry.score + "<br>";
+                });
+            })
+    }, 1000)
+</script>
+
+</body>
+</html>

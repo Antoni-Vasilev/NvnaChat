@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <title>Tetris</title>
+    <link rel="stylesheet" th:href="@{/tetris/style.css}">
+</head>
+<body>
+<div style="display: flex; align-items: flex-start;">
+    <canvas id="tetris"></canvas>
+    <div style="margin-left:32px; text-align:center;">
+        <div style="color:white;font-family:sans-serif;margin-bottom:8px;">Next</div>
+        <canvas id="next" width="120" height="120"></canvas>
+    </div>
+</div>
+
+<iframe src="/chat" width="30%" height="100%" style="border: none; position: absolute; left: 0"></iframe>
+<iframe src="/scoreboard" width="30%" height="100%" style="border: none; position: absolute; right: 0"></iframe>
+
+<script type="module" th:src="@{/tetris/main.js}"></script>
+<script th:src="@{/tetris/tetris.js}"></script>
+</body>
+</html>
