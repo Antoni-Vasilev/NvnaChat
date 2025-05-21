@@ -141,35 +141,6 @@ form.addEventListener('submit', function (e) {
     } else {
         login(email, password);
     }
-
-    // Избери  правилния URL според режима
-    // const url = isRegister ? '/api/register' : '/api/login';
-    //
-    // fetch(url, {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ email, username, password })
-    // })
-    //     .then(async res => {
-    //         const data = await res.json();
-    //         if (!res.ok) {
-    //             // Покажи грешка от сървъра
-    //             if (data.error) {
-    //                 if (data.error.includes('Имейл')) emailError.textContent = data.error;
-    //                 else if (data.error.includes('Потребителското')) usernameError.textContent = data.error;
-    //                 else formError.textContent = data.error;
-    //             } else {
-    //                 formError.textContent = 'Грешка при заявката';
-    //             }
-    //             return;
-    //         }
-    //         // Успешен вход/регистрация
-    //         setCurrentUser({ email: data.email, username: data.username });
-    //         window.location.href = 'chat.html';
-    //     })
-    //     .catch(() => {
-    //         formError.textContent = 'Грешка при връзка със сървъра!';
-    //     });
 });
 
 function login(email, password) {
@@ -180,7 +151,12 @@ function login(email, password) {
             "email": email,
             "password": password,
         })
-    }).then(r => r.json())
+    }).then(r => {
+        if (r.status != 200) {
+            passwordError.textContent = 'Грешна парола';
+            return;
+        } else return r.json();
+    })
         .then(data => {
             localStorage.setItem('currentUser', data.token);
             window.location.href = 'chat';

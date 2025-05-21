@@ -25,4 +25,9 @@ public class WebController {
     public String scoreboard() {
         return "scoreboard";
     }
+
+    @GetMapping("/")
+    public String index() {
+        return "redirect:/tetris";
+    }
 }
