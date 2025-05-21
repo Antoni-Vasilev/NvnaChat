@@ -21,7 +21,7 @@
             }).then(r => r.json())
                 .then(data => {
                     scores.innerHTML = "";
-                    scores.innerHTML += data.username + " - " + data.score + "<br>";
+                    scores.innerHTML += data.username + " - " + data.score + "<br><br>";
                     data.scores.forEach(scoreEntry => {
                         scores.innerHTML += scoreEntry.username + " - " + scoreEntry.score + "<br>";
                     });

@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -30,12 +33,29 @@ public class UserController {
         User findUser = sessionService.findSessionById(token).getUser();
         List<User> users = userService.findAll();
 
-        users.removeIf(it -> it.getId().equals(findUser.getId()) || it.getBestScore() == 0);
+        List<UserScoreListResponse> scores = users.stream()
+                .map(it -> new UserScoreListResponse(it.getId(), it.getUsername(), it.getBestScore()))
+                .filter(it -> it.getScore() > 0)
+                .collect(Collectors.toCollection(ArrayList::new)); // mutable list
+
+        AtomicInteger i = new AtomicInteger(1);
+        scores = scores.stream()
+                .map(it -> new UserScoreListResponse(it.getId(), i.getAndIncrement() + ". " + it.getUsername(), it.getScore()))
+                .collect(Collectors.toCollection(ArrayList::new)); // mutable list again
+
+        UserScoreListResponse user = scores.stream()
+                .filter(it -> it.getId().equals(findUser.getId()))
+                .findFirst()
+                .orElse(null);
+
+        if (user != null) {
+            scores.removeIf(it -> it.getId().equals(user.getId()));
+        }
 
         UserScoreResponse response = new UserScoreResponse(
-                findUser.getUsername(),
-                findUser.getBestScore(),
-                users.stream().map(it -> new UserScoreListResponse(it.getUsername(), it.getBestScore())).toList()
+                user.getUsername(),
+                user.getScore(),
+                scores
         );
 
         return ResponseEntity.ok(response);

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UserScoreListResponse {
 
+    private String id;
     private String username;
     private int score;
 }
