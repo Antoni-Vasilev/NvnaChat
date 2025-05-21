@@ -30,14 +30,18 @@ public class UserController {
 
     @PostMapping("/scores")
     public ResponseEntity<UserScoreResponse> scores(@RequestHeader("Authorization") String token) {
+        // Зареждам потребител според сесия
         User findUser = sessionService.findSessionById(token).getUser();
+        // Зареждам всички потребители
         List<User> users = userService.findAll();
 
+        // Премахвам потребителите с 0 точки
         List<UserScoreListResponse> scores = users.stream()
                 .map(it -> new UserScoreListResponse(it.getId(), it.getUsername(), it.getBestScore()))
                 .filter(it -> it.getScore() > 0)
                 .collect(Collectors.toCollection(ArrayList::new)); // mutable list
 
+        // Добавям към имената на потребителите номерацията в класацията
         AtomicInteger i = new AtomicInteger(1);
         scores = scores.stream()
                 .map(it -> new UserScoreListResponse(it.getId(), i.getAndIncrement() + ". " + it.getUsername(), it.getScore()))
@@ -48,10 +52,12 @@ public class UserController {
                 .findFirst()
                 .orElse(null);
 
+        // Премахвам се от списъка
         if (user != null) {
             scores.removeIf(it -> it.getId().equals(user.getId()));
         }
 
+        // Приготвям данните за изпращане
         UserScoreResponse response = new UserScoreResponse(
                 user.getUsername(),
                 user.getScore(),

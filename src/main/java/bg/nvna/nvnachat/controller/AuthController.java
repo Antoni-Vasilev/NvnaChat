@@ -30,10 +30,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthRegisterResponse> register(@RequestBody AuthRegisterRequest request) {
+        // Проверявал дали имейла съществува
         if (userService.isEmailExist(request.getEmail())) {
             throw new DuplicateRecordException("Email already exist");
         }
 
+        // Запазвам и връшам информацията на потребителя
         User registeredUser = userService.register(request);
         return ResponseEntity.ok(new AuthRegisterResponse(
                 registeredUser.getEmail(),
@@ -43,10 +45,12 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthLoginResponse> login(@RequestBody AuthLoginRequest request) {
+        // Проверявам дали потребителя съществува
         if (!userService.isEmailExist(request.getEmail())) {
             throw new NotFoundException("Email not exist");
         }
 
+        // Проверявам дали паролата въведена от потребителя е правилна
         User findUser = userService.findByEmail(request.getEmail());
         if (request.getPassword().equals(findUser.getPassword())) {
             return ResponseEntity.ok(new AuthLoginResponse(

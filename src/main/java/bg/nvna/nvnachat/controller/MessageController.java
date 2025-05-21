@@ -34,12 +34,14 @@ public class MessageController {
             @RequestBody MessageSendRequest request,
             @RequestHeader("Authorization") String token
     ) {
+        // Запазвам съобщението
         messageService.sendMessage(new Message(null, request.getMessage(), new Date(), sessionService.findSessionById(token).getUser()));
         return ResponseEntity.ok("Message sent successfully");
     }
 
     @PostMapping("/get")
     public ResponseEntity<List<MessageGetResponse>> getMessages(@RequestBody MessageGetRequest request, @RequestHeader("Authorization") String token) {
+        // Взимам всички съобщения според нуждите на потребителя
         List<Message> messages;
         if (request.getCurrentDate() == null) {
             messages = messageService.getOldMessages(new Date());
@@ -48,6 +50,7 @@ public class MessageController {
             else messages = messageService.getNewMessages(request.getCurrentDate());
         }
 
+        // Подготвям отговора за връщане
         String myUsername = sessionService.findSessionById(token).getUser().getUsername();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
         List<MessageGetResponse> responses = new ArrayList<>();
