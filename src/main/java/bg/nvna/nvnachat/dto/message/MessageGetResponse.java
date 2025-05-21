@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -14,6 +12,6 @@ import java.util.Date;
 public class MessageGetResponse {
     private String senderUsername;
     private String message;
-    private Date sentDate;
+    private String sentDate;
     private boolean itsMe;
 }

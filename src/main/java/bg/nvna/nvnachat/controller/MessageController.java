@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,8 +49,9 @@ public class MessageController {
         }
 
         String myUsername = sessionService.findSessionById(token).getUser().getUsername();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
         List<MessageGetResponse> responses = new ArrayList<>();
-        messages.forEach(it -> responses.add(new MessageGetResponse(it.getSender().getUsername(), it.getMessage(), it.getCreatedAt(), it.getSender().getUsername().equals(myUsername))));
+        messages.forEach(it -> responses.add(new MessageGetResponse(it.getSender().getUsername(), it.getMessage(), simpleDateFormat.format(it.getCreatedAt()), it.getSender().getUsername().equals(myUsername))));
         return ResponseEntity.ok(responses);
     }
 }

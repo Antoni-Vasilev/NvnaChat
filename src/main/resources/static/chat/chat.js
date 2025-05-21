@@ -64,14 +64,21 @@ function addMessage(msg) {
 
     const userSpan = document.createElement('span');
     userSpan.className = 'username';
+    if (msg.itsMe) userSpan.style.textAlign = 'right';
     userSpan.textContent = msg.senderUsername;
 
     const textSpan = document.createElement('span');
     textSpan.className = 'text';
     textSpan.textContent = msg.message;
 
+    const dateSpan = document.createElement('span');
+    dateSpan.className = 'date';
+    if (msg.itsMe) dateSpan.style.textAlign = 'right';
+    dateSpan.textContent = msg.sentDate;
+
     msgDiv.appendChild(userSpan);
     msgDiv.appendChild(textSpan);
+    msgDiv.appendChild(dateSpan);
     messagesDiv.appendChild(msgDiv);
 
     // Скролирай надолу
