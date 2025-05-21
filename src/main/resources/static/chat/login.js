@@ -70,11 +70,13 @@ function toggleLinkBtn() {
         // Ако сме в режим регистрация, сменяме заглавието и бутона
         formTitle.textContent = 'Регистрация';
         submitBtn.textContent = 'Регистрация';
+        document.getElementById("username-group").style.display = "block";
         toggleText.innerHTML = 'Вече имате акаунт? <a href="#" id="toggle-link" onclick="toggleLinkBtn()">Вход</a>';
     } else {
         // Ако сме в режим вход, сменяме заглавието и бутона
         formTitle.textContent = 'Вход';
         submitBtn.textContent = 'Вход';
+        document.getElementById("username-group").style.display = "none";
         toggleText.innerHTML = 'Нямате акаунт? <a href="#" id="toggle-link" onclick="toggleLinkBtn()">Регистрация</a>';
     }
     // Присвояваме отново event listener на новия линк
@@ -118,12 +120,12 @@ form.addEventListener('submit', function (e) {
     clearErrors();
 
     const email = emailInput.value.trim();
-    const username = usernameInput.value.trim();
     const password = passwordInput.value;
 
     if (!validateForm(email, username, password)) return;
 
     if (isRegister) {
+        const username = usernameInput.value.trim();
         fetch('/auth/register', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
